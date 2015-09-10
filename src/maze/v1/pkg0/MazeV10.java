@@ -1,10 +1,7 @@
 package maze.v1.pkg0;
-import java.io.*; 
 import java.awt.*;
-import java.awt.geom.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.JOptionPane;
 public class MazeV10 extends JFrame implements Runnable {
     boolean animateFirstTime = true;
     Image image;
@@ -135,95 +132,91 @@ public class MazeV10 extends JFrame implements Runnable {
     boolean secretPassage;
     boolean spot;
     boolean power;
-    
     static public JFrame jframe;
     static public Dimension dim;
-    
-        
-    
     static MazeV10 frame1;
-
     public static void main(String[] args) {
         dim = Toolkit.getDefaultToolkit().getScreenSize();
         frame1 = new MazeV10();
-        frame1.setSize(w.WINDOW_WIDTH, w.WINDOW_HEIGHT);
+        frame1.setSize(maze.v1.pkg0.Window.WINDOW_WIDTH, maze.v1.pkg0.Window.WINDOW_HEIGHT);
         frame1.setLocation(dim.width / 2 - frame1.getWidth() / 2, dim.height / 2 - frame1.getHeight() / 2);
         frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame1.setVisible(true);
     }
-
     public MazeV10() {
-
         addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent e) {
-                if (e.BUTTON1 == e.getButton()) {
+                if (MouseEvent.BUTTON1 == e.getButton()) {
                 }
-                if (e.BUTTON2 == e.getButton()) {
+                if (MouseEvent.BUTTON2 == e.getButton()) {
                 }
-                if (e.BUTTON3 == e.getButton()) {
+                if (MouseEvent.BUTTON3 == e.getButton()) {
                     reset();
                 }
                 repaint();
             }
         });
-
     addMouseMotionListener(new MouseMotionAdapter() {
+      @Override
       public void mouseDragged(MouseEvent e) {
         repaint();
       }
     });
-
     addMouseMotionListener(new MouseMotionAdapter() {
+      @Override
       public void mouseMoved(MouseEvent e) {
         repaint();
       }
     });
-
         addKeyListener(new KeyAdapter() {
-
+            @Override
             public void keyPressed(KeyEvent e) {
-                if (e.VK_RIGHT == e.getKeyCode())
+                if (KeyEvent.VK_RIGHT == e.getKeyCode())
                 {
                     player.setRowDir(0);
                     player.setColDir(1);
                 }
-                if (e.VK_LEFT == e.getKeyCode())
+                if (KeyEvent.VK_LEFT == e.getKeyCode())
                 {
                     player.setRowDir(0);
                     player.setColDir(-1);
                 }
-                if (e.VK_UP == e.getKeyCode())
+                if (KeyEvent.VK_UP == e.getKeyCode())
                 {
                     player.setRowDir(-1);
                     player.setColDir(0);
                 }
-                if (e.VK_DOWN == e.getKeyCode())
+                if (KeyEvent.VK_DOWN == e.getKeyCode())
                 {
                     player.setRowDir(1);
                     player.setColDir(0);
                 }
-                if (e.VK_SPACE == e.getKeyCode())
+                if (KeyEvent.VK_SPACE == e.getKeyCode())
                 {
                     spot=true; 
                 }
-                if (e.VK_BACK_QUOTE == e.getKeyCode())
+                if (KeyEvent.VK_BACK_QUOTE == e.getKeyCode())
                 {
-                    
                     Start.setCheats("");
-                    if (Start.getCheats().charAt(0) == 'k'&&Start.getCheats().charAt(1) == 'i')
+                    if (Start.getCheats().charAt(0) == 'k'&&Start.getCheats().charAt(1) == 'i'&&Start.getCheats().charAt(2) == 'l'&&Start.getCheats().charAt(3) == 'l')
                     {
                         numNPC=0;  
                     }
-                    if (Start.getCheats().charAt(0) == 'r'&&Start.getCheats().charAt(1) == 'e')
+                    if (Start.getCheats().charAt(0) == 'r'&&Start.getCheats().charAt(1) == 'e'&&Start.getCheats().charAt(2) == 'v'&&Start.getCheats().charAt(3) == 'i'&&Start.getCheats().charAt(4) == 'v'&&Start.getCheats().charAt(5) == 'e')
                     {
                         numNPC=Start.getnumNPC();
                     }
-                    if (Start.getCheats().charAt(0) == 'c'&&Start.getCheats().charAt(1) == 'i')
+                    if (Start.getCheats().charAt(0) == 'c'&&Start.getCheats().charAt(1) == 'o'&&Start.getCheats().charAt(2) == 'i'&&Start.getCheats().charAt(3) == 'n')
                     {
                         numCoin=Start.getnumCoins();
                     }  
+                    if (Start.getCheats().charAt(0) == 'r'&&Start.getCheats().charAt(1) == 'e'&&Start.getCheats().charAt(2) == 's'&&Start.getCheats().charAt(3) == 'e'&&Start.getCheats().charAt(4) == 't')
+                    {
+                        reset();
+                    }
                 }
-                if (e.VK_SPACE == e.getKeyCode())
+                if (KeyEvent.VK_SPACE == e.getKeyCode())
                 {
                     key++;
                     if(key%2==0)
@@ -242,14 +235,12 @@ public class MazeV10 extends JFrame implements Runnable {
         start();
     }
     Thread relaxer;
-////////////////////////////////////////////////////////////////////////////
     public void init() {
         requestFocus();
     }
-////////////////////////////////////////////////////////////////////////////
     public void destroy() {
     }
-////////////////////////////////////////////////////////////////////////////
+    @Override
     public void paint(Graphics gOld) {
         if (image == null || w.xsize != getSize().width || w.ysize != getSize().height) {
             w.xsize = getSize().width;
@@ -420,11 +411,12 @@ public class MazeV10 extends JFrame implements Runnable {
         g.rotate(-rot  * Math.PI/180.0);
         g.translate(-xpos,-ypos);
     } 
+    @Override
     public void run() {
         while (true) {
             animate();
             repaint();
-            double seconds = 0.04;    //time that 1 frame takes.
+            double seconds = 0.04;
             int miliseconds = (int) (1000.0 * seconds);
             try {
                 Thread.sleep(miliseconds);
@@ -432,7 +424,6 @@ public class MazeV10 extends JFrame implements Runnable {
             }
         }
     }
-/////////////////////////////////////////////////////////////////////////
     public void reset() {  
         boardNum=1;
         key++;
@@ -460,7 +451,7 @@ public class MazeV10 extends JFrame implements Runnable {
         tempScore=0;
         player=new Character();
         player.setColor(Color.BLUE);
-        player.setName("Player");//(JOptionPane.showInputDialog("Enter Name")));
+        player.setName("Player");
                 keepLooping = true;
                 while (keepLooping)
                 {
