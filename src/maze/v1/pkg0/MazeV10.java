@@ -1,48 +1,24 @@
-
 package maze.v1.pkg0;
-
-import java.io.*;
+import java.io.*; 
 import java.awt.*;
 import java.awt.geom.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.JOptionPane;
-//import static maze2.Maze2.WINDOW_BORDER;
- 
 public class MazeV10 extends JFrame implements Runnable {
-//    static final int XBORDER = 20;
-//    static final int YBORDER = 20;
-//    static final int YTITLE = 30;
-//    static final int WINDOW_BORDER = 8;
-//    static final int WINDOW_WIDTH = 2*(WINDOW_BORDER + XBORDER) + 441;
-//    static final int WINDOW_HEIGHT = YTITLE + WINDOW_BORDER + 2 * YBORDER + 420;
-     boolean animateFirstTime = true;
-//    int xsize = -1;
-//    int ysize = -1;
+    boolean animateFirstTime = true;
     Image image;
     Graphics2D g;
-    
-    Image Player;
-    Image NPC;
-    
-    
+    Image Player,NPC;
     static Window w = new Window();
-
-    
-
-    final int numRows = 21;
-    final int numColumns = 21;
-
+    final int numRows = 21,numColumns = 21;
     final int PATH = 0;
     final int WALL = 1;
     final int SECR = 2;
     final int PACM = 3;
     final int PACN = 4;
     final int ENDG = 5;
-    
     int tempScore;
-    
-  
     int board[][];
     int board1[][] = {
 {WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL },
@@ -66,7 +42,6 @@ public class MazeV10 extends JFrame implements Runnable {
 {WALL,PATH,WALL,WALL,WALL,PATH,WALL,WALL,WALL,WALL,PATH,WALL,ENDG,WALL,WALL,PATH,WALL,WALL,WALL,PATH,WALL },
 {WALL,PATH,PATH,PATH,PATH,PATH,PATH,PATH,PATH,PATH,PATH,WALL,WALL,WALL,WALL,PATH,PATH,PATH,PATH,PATH,WALL },
 {WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL }
-
     };
     int board2[][] = {
 {WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL },
@@ -137,45 +112,26 @@ public class MazeV10 extends JFrame implements Runnable {
 {WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL },
 {WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL },
 {WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL }
-
     };
-    int boardNum;
-   
-//    int currentRow;
-//    int currentCol;
-//    int rowDir;
-//    int colDir;
     Character player;
     Coin coin[];
-    
-    
     int numNPC = Start.getnumNPC();
     int numCoin=Start.getnumCoins();
-    
     Character npc[];
-    int timeCount;
-    int count;
+    int timeCount,count;
+    int boardNum;    
     int highScore=Start.getHighScore();
-    int key;
-    int colMove;
+    int key,colMove;
     int preVal;
-    int iPortalX;
-    int iPortalY;
-    int oPortalX;
-    int oPortalY;
+    int iPortalX,iPortalY,oPortalX,oPortalY;
     double spotC;
     int spot1;
-    
-    boolean gameOver;
+    boolean gameOver,gameOn;
     boolean keepLooping;
     boolean colCoin;
     boolean pacMan;
-    boolean portalI;
-    boolean portalO;
-    boolean Easy;
-    boolean Medium;
-    boolean Hard;
-    boolean gameOn;
+    boolean portalI,portalO;
+    boolean Easy,Medium,Hard;
     boolean secretPassage;
     boolean spot;
     boolean power;
@@ -201,13 +157,10 @@ public class MazeV10 extends JFrame implements Runnable {
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 if (e.BUTTON1 == e.getButton()) {
-                    //left button
                 }
                 if (e.BUTTON2 == e.getButton()) {
-                    ///iddle button
                 }
                 if (e.BUTTON3 == e.getButton()) {
-                    //right button
                     reset();
                 }
                 repaint();
@@ -268,8 +221,7 @@ public class MazeV10 extends JFrame implements Runnable {
                     if (Start.getCheats().charAt(0) == 'c'&&Start.getCheats().charAt(1) == 'i')
                     {
                         numCoin=Start.getnumCoins();
-                    }
-                    
+                    }  
                 }
                 if (e.VK_SPACE == e.getKeyCode())
                 {
@@ -283,18 +235,12 @@ public class MazeV10 extends JFrame implements Runnable {
                         pacMan = false;
                     }
                 }
-
-
                 repaint();
             }
         });
         init();
         start();
     }
-
-
-
-
     Thread relaxer;
 ////////////////////////////////////////////////////////////////////////////
     public void init() {
@@ -313,42 +259,29 @@ public class MazeV10 extends JFrame implements Runnable {
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
         }
-
-//fill background
         g.setColor(Color.cyan);
-
         g.fillRect(0, 0, w.xsize, w.ysize);
-
         int x[] = {w.getX(0), w.getX(w.getWidth2()), w.getX(w.getWidth2()), w.getX(0), w.getX(0)};
         int y[] = {w.getY(0), w.getY(0), w.getY(w.getHeight2()), w.getY(w.getHeight2()), w.getY(0)};
-//fill border
         g.setColor(Color.white);
         g.fillPolygon(x, y, 4);
-// draw border
         g.setColor(Color.red);
         g.drawPolyline(x, y, 5);
-
         if (animateFirstTime) {
             gOld.drawImage(image, 0, 0, null);
             return;
         }
-
         g.setColor(Color.red);
-//horizontal lines
         for (int zi=1;zi<numRows;zi++)
         {
             g.drawLine(w.getX(0) ,w.getY(0)+zi*w.getHeight2()/numRows ,
             w.getX(w.getWidth2()) ,w.getY(0)+zi*w.getHeight2()/numRows );
         }
-//vertical lines
         for (int zi=1;zi<numColumns;zi++)
         {
             g.drawLine(w.getX(0)+zi*w.getWidth2()/numColumns ,w.getY(0) ,
             w.getX(0)+zi*w.getWidth2()/numColumns,w.getY(w.getHeight2())  );
         }
-
-        
-//Display the walls and the secret passage.
         for (int zrow=0;zrow<numRows;zrow++)
         {
             for (int zcolumn=0;zcolumn<numColumns;zcolumn++)
@@ -356,18 +289,6 @@ public class MazeV10 extends JFrame implements Runnable {
                 if (board[zrow][zcolumn] == WALL)
                 {
                     g.setColor(Color.GRAY);
-                    /*int random=(int)(Math.random()*2);
-                    
-                    if(random==0)
-                    {
-                        Color newCol1 = new Color(132,0,20);
-                        g.setColor(newCol1);
-                    }
-                    if(random==1)
-                    {
-                        Color newCol1 = new Color(185,0,28);
-                        g.setColor(newCol1);
-                    }*/
                     g.fillRect(w.getX(0)+zcolumn*w.getWidth2()/numColumns,
                     w.getY(0)+zrow*w.getHeight2()/numRows,
                     w.getWidth2()/numColumns,
@@ -386,7 +307,6 @@ public class MazeV10 extends JFrame implements Runnable {
                 if (board[zrow][zcolumn] == PACM&&board[zrow][zcolumn] == PACN)
                 {
                     g.setColor(Color.GREEN);
-
                     g.fillRect(w.getX(0)+zcolumn*w.getWidth2()/numColumns,
                     w.getY(0)+zrow*w.getHeight2()/numRows,
                     w.getWidth2()/numColumns,
@@ -395,17 +315,13 @@ public class MazeV10 extends JFrame implements Runnable {
                 if (board[zrow][zcolumn] == ENDG)
                 {
                     g.setColor(Color.BLACK);
-
                     g.fillRect(w.getX(0)+zcolumn*w.getWidth2()/numColumns,
                     w.getY(0)+zrow*w.getHeight2()/numRows,
                     w.getWidth2()/numColumns,
                     w.getHeight2()/numRows);
                 }
-             
             }
         }
-        
-
         for (int index=0;index<numNPC;index++)
         {
             g.setColor(npc[index].getColor());
@@ -417,8 +333,6 @@ public class MazeV10 extends JFrame implements Runnable {
             g.drawString(npc[index].getName()+npc[index].getcoinVal(),w.getX(0)+npc[index].getCurrentCol()*w.getWidth2()/numColumns,
             w.getY(0)+npc[index].getCurrentRow()*w.getHeight2()/numRows);
         }        
-        
-        
         for (int index=0;index<numCoin;index++)
         {
             g.setColor(coin[index].getColor());
@@ -468,10 +382,7 @@ public class MazeV10 extends JFrame implements Runnable {
                 g.drawOval(w.getX(0)+player.getCurrentCol()*w.getWidth2()/numColumns-50,w.getY(0)+player.getCurrentRow()*w.getHeight2()/numRows-50,w.getWidth2()/numColumns*6,w.getHeight2()/numRows*6);
             }
             drawCircle(0,0,0,1,1);
-
-
         }
-
         if(gameOver)
         {
             g.setColor(Color.RED);
@@ -493,8 +404,6 @@ public class MazeV10 extends JFrame implements Runnable {
             g.setColor(Color.BLACK);
             g.drawString("PACMAN", 300, 50); 
         }
-        //g.drawString("PowerUps: " + powerupcount, 250, 50); 
-            
         gOld.drawImage(image, 0, 0, null);
     }
     public void drawCircle(int xpos,int ypos,int rot,double xscale,double yscale)
@@ -502,19 +411,15 @@ public class MazeV10 extends JFrame implements Runnable {
         g.translate(xpos,ypos);
         g.rotate(rot  * Math.PI/180.0);
         g.scale( xscale , yscale );
-
         if(spot)
         {
             g.setColor(Color.red);
             g.drawOval(w.getX(0)+player.getCurrentCol()*w.getWidth2()/numColumns-50,w.getY(0)+player.getCurrentRow()*w.getHeight2()/numRows-50,w.getWidth2()/numColumns*6,w.getHeight2()/numRows*6);
         }
-        
         g.scale( 1.0/xscale,1.0/yscale );
         g.rotate(-rot  * Math.PI/180.0);
         g.translate(-xpos,-ypos);
     } 
-////////////////////////////////////////////////////////////////////////////
-// needed for     implement runnable
     public void run() {
         while (true) {
             animate();
@@ -529,7 +434,6 @@ public class MazeV10 extends JFrame implements Runnable {
     }
 /////////////////////////////////////////////////////////////////////////
     public void reset() {  
-        
         boardNum=1;
         key++;
         if(key==1)
@@ -553,13 +457,8 @@ public class MazeV10 extends JFrame implements Runnable {
             boardNum=4;
             key=0;
         }
-       
         tempScore=0;
-       
-
         player=new Character();
-       
-        
         player.setColor(Color.BLUE);
         player.setName("Player");//(JOptionPane.showInputDialog("Enter Name")));
                 keepLooping = true;
@@ -575,7 +474,6 @@ public class MazeV10 extends JFrame implements Runnable {
         player.setRowDir(0);
         player.setColDir(0);
         player.setCoinVal(tempScore);
-        
         coin = new Coin[numCoin];
         for (int index=0;index<numCoin;index++)
         {
@@ -595,8 +493,6 @@ public class MazeV10 extends JFrame implements Runnable {
         for (int index=0;index<numNPC;index++)
         {
             npc[index] = new Character();
-            
-            
                 keepLooping = true;
                 while (keepLooping)
                 {
@@ -608,10 +504,6 @@ public class MazeV10 extends JFrame implements Runnable {
                     }
                 }            
         }
-
-        
-            
-        
         for(int index=0;index<numNPC;index++)
         {
             int col1=(int)(Math.random()*255);
@@ -624,10 +516,8 @@ public class MazeV10 extends JFrame implements Runnable {
         }
         for(int index=0;index<numCoin;index++)
         {
-            //coin[index].setColor(Color.yellow);
             coin[index].setCoinVal((int)(Math.random()*4+1));
             coin[index].setCoinName(""+coin[index].getCoinVal());
-            
         }
         for(int index=0;index<numNPC;index++)
         {
@@ -668,10 +558,6 @@ public class MazeV10 extends JFrame implements Runnable {
            if (board[iPortalY][iPortalX] == PATH)
            {       
                keepLooping = false;
-               /*if(oPortalX+20<iPortalX)
-               {
-                   keepLooping=true;
-               }*/
            }
        }
        keepLooping=true;
@@ -681,12 +567,7 @@ public class MazeV10 extends JFrame implements Runnable {
            oPortalX=(int)(Math.random()*numColumns/2+numColumns/2);
            if (board[oPortalY][oPortalX] == PATH)
            {       
-               
                keepLooping = false;
-               /*if(oPortalX>iPortalX+20)
-               {
-                   keepLooping=true;
-               }*/
            }
        }
        portalI=true;
@@ -695,15 +576,8 @@ public class MazeV10 extends JFrame implements Runnable {
        spotC=0;
        spot1=50;
        power=false;
-       
-       
        gameOn=false;
-       
-
     }
-    
-    
-/////////////////////////////////////////////////////////////////////////
     public void animate() {
         if (animateFirstTime) {
             animateFirstTime = false;
@@ -712,13 +586,10 @@ public class MazeV10 extends JFrame implements Runnable {
                 w.ysize = getSize().height;
             }
             Player = Toolkit.getDefaultToolkit().getImage("Pacman.png");
-            
             reset();
-            
             highScore=0;
         }
         {
-            
             if(player.getcoinVal()>highScore)
                 highScore=player.getcoinVal();
             if(gameOver)
@@ -728,7 +599,6 @@ public class MazeV10 extends JFrame implements Runnable {
             {
                 player.setCoinVal(player.getcoinVal()-1);
                 board[player.getCurrentRow()][player.getCurrentCol()]=PATH;
-                //player.Move();
             }
             else if(board[player.getCurrentRow()][player.getCurrentCol()] == WALL&&player.getcoinVal()==0)
             {
@@ -801,7 +671,6 @@ public class MazeV10 extends JFrame implements Runnable {
                    int random=(int)(Math.random()*5+1);
                    coin[index].setCoinVal(random);
                    keepLooping = true;
-
                    while (keepLooping)
                    {
                        coin[index].setCurrentRow((int)(Math.random()*numRows));
@@ -811,9 +680,7 @@ public class MazeV10 extends JFrame implements Runnable {
                            keepLooping = false;
                        }
                    }
-
                 }
-
             }
             for (int index=0;index<numNPC;index++)
             {
@@ -835,13 +702,11 @@ public class MazeV10 extends JFrame implements Runnable {
                        }
                     }
                 }
-
             }
             if(colCoin)
             {
                 count++;
                 colMove-=2;
-
             }
             if(count%25==24)
             {
@@ -849,7 +714,6 @@ public class MazeV10 extends JFrame implements Runnable {
                 colMove=0;
                 preVal=0;
             }
-
             if(player.getCurrentCol()==iPortalX&&player.getCurrentRow()==iPortalY&&portalI)
             {
                 player.setCurrentCol(oPortalX);
@@ -874,7 +738,6 @@ public class MazeV10 extends JFrame implements Runnable {
                 secretPassage=true;
             else
                 secretPassage=false;
-            
             if(board[player.getCurrentRow()][player.getCurrentCol()]==ENDG)
             {
                 reset();
@@ -904,27 +767,17 @@ public class MazeV10 extends JFrame implements Runnable {
             {
                 spot=true;
             }
-            
-
-
-
-
             tempScore=player.getcoinVal();
             player.setCoinVal(tempScore);
-            
-
             timeCount++;
         }
     }
-
-////////////////////////////////////////////////////////////////////////////
     public void start() {
         if (relaxer == null) {
             relaxer = new Thread(this);
             relaxer.start();
         }
     }
-////////////////////////////////////////////////////////////////////////////
     public void stop() {
         if (relaxer.isAlive()) {
             relaxer.stop();
@@ -932,15 +785,7 @@ public class MazeV10 extends JFrame implements Runnable {
         relaxer = null;
     }
 }
-/////////////////////////////////////////////////////////////////////////
 class Window {
-
-//    static final int WINDOW_WIDTH = 2*(WINDOW_BORDER + XBORDER) + 441;
-//    static final int WINDOW_HEIGHT = 600;
-//    final int TOP_BORDER = 40;
-//    final int SIDE_BORDER = 8;
-//    final int BOTTOM_BORDER = 8;
-//    final int YTITLE = 25;
     int xsize = -1;
     int ysize = -1;
     static final int XBORDER = 20;
@@ -949,28 +794,22 @@ class Window {
     static final int WINDOW_BORDER = 8;
     static final int WINDOW_WIDTH = 2*(WINDOW_BORDER + XBORDER) + 425;
     static final int WINDOW_HEIGHT = YTITLE + WINDOW_BORDER + 2 * YBORDER + 424;
-
     public int getX(int x) {
         return (x + XBORDER);
     }
-
     public int getY(int y) {
         return (y + YBORDER + YTITLE);
     }
-
     public int getYNormal(int y) {
         return (-y + YBORDER + YTITLE + getHeight2());
     }
-
     public int getWidth2() {
         return (xsize - XBORDER * 2);
     }
-
     public int getHeight2() {
         return (ysize - (YBORDER + YTITLE) - WINDOW_BORDER);
     }
 }
-
 class Character
 {
     private int currentRow;
@@ -981,32 +820,21 @@ class Character
     private int coinVal;
     private Color color;
     private String name;
-    
-    
-    
     public void draw(Graphics2D g, Window w, Image image, MazeV10 obj) {
         double xscale = 1.0;
         double yscale = 1.0;
-
         g.translate(w.getX(currentCol), w.getYNormal(currentRow));
         g.scale(xscale, yscale);
-
-
-
         int width=100;
         int height=100;
         g.drawImage(image, -width / 2, -height / 2, width, height, obj);
-
         g.scale(1.0 / xscale, 1.0 / yscale);
         g.translate(-w.getX(currentCol), -w.getYNormal(currentRow));
     }
-
-    
     public String getName()
     {
         return(name);
     }
-    
     public int getSpeed()
     {
         return(speed);
@@ -1083,15 +911,11 @@ class Character
 }
 class Coin
 {
-    
     private int currentRow;
     private int currentCol; 
     private int coinVal;
     private Color color = Color.yellow;
     private String coin;
-    
-    
-    
     public int getCurrentRow()
     {
         return(currentRow);
@@ -1112,7 +936,6 @@ class Coin
     {
         return(coin);
     }
-    
     public void setCurrentRow(int _row)
     {
         currentRow = _row;
@@ -1130,4 +953,3 @@ class Coin
         coin = _coin;
     }
 }
-
